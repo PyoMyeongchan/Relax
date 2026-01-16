@@ -500,7 +500,7 @@ MonoBehaviour:
   normalMaterial: {fileID: 2100000, guid: 4f6715c256b89124bb53b0a0ef2ef0bd, type: 2}
   selectedMaterial: {fileID: 2100000, guid: c3efceed1798fe84381ecb12759aa325, type: 2}
   spawnParent: {fileID: 0}
-  spawnStartPosition: {x: -6, y: 0, z: -8}
+  spawnStartPosition: {x: -6, y: 0, z: 6}
   blockSpacingX: 4
   blockSpacingZ: 4
   blocksPerRow: 4
