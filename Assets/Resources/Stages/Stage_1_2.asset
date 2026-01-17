@@ -15,18 +15,30 @@ MonoBehaviour:
   stageName: 1-2
   stageDescription: 
   gridWidth: 4
-  gridHeight: 4
+  gridHeight: 3
   blocks:
   - width: 3
     height: 2
-    shapeFlattened: 000101010001
-  - width: 3
+    blockColor: {r: 0.5, g: 0, b: 1, a: 1}
+    shapeFlattened: 010101000101
+    colorR: 0.5
+    colorG: 0
+    colorB: 1
+    colorA: 1
+  - width: 2
     height: 2
-    shapeFlattened: 000101010001
-  - width: 3
+    blockColor: {r: 1, g: 0.5, b: 0, a: 1}
+    shapeFlattened: 01010100
+    colorR: 1
+    colorG: 0.5
+    colorB: 0
+    colorA: 1
+  - width: 2
     height: 2
-    shapeFlattened: 010001000101
-  - width: 4
-    height: 1
+    blockColor: {r: 1, g: 0.92, b: 0.016, a: 1}
     shapeFlattened: 01010101
+    colorR: 1
+    colorG: 0.92
+    colorB: 0.016
+    colorA: 1
   difficulty: 1

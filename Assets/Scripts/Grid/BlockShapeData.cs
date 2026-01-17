@@ -14,11 +14,17 @@ public class BlockShapeData
     public int width;
     public int height;
 
+    [Header("Visual")]
+    public Color blockColor = Color.white;
+
     /// <summary>
     /// 1D 배열로 저장 (Unity Inspector 직렬화용)
     /// </summary>
     [SerializeField]
     private bool[] shapeFlattened;
+
+    [SerializeField]
+    private float colorR, colorG, colorB, colorA;
 
     /// <summary>
     /// 기본 생성자
@@ -83,6 +89,9 @@ public class BlockShapeData
                 shapeFlattened[x * height + y] = shape[x, y];
             }
         }
+        
+        // 색상도 저장
+        SaveColor();
     }
 
     /// <summary>
@@ -155,6 +164,26 @@ public class BlockShapeData
     public void OnValidate()
     {
         UnflattenShape();
+        LoadColor();
+    }
+
+    /// <summary>
+    /// 색상 저장 (직렬화용)
+    /// </summary>
+    public void SaveColor()
+    {
+        colorR = blockColor.r;
+        colorG = blockColor.g;
+        colorB = blockColor.b;
+        colorA = blockColor.a;
+    }
+
+    /// <summary>
+    /// 색상 복원 (역직렬화용)
+    /// </summary>
+    public void LoadColor()
+    {
+        blockColor = new Color(colorR, colorG, colorB, colorA);
     }
 }
 

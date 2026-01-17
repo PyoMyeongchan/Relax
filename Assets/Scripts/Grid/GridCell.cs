@@ -8,6 +8,7 @@ public class GridCell : MonoBehaviour
     [Header("Cell Info")]
     [SerializeField] private Vector2Int gridPosition;
     [SerializeField] private bool isFilled;
+    [SerializeField] private Color filledColor = Color.white;
 
     [Header("Visual")]
     [SerializeField] private MeshRenderer meshRenderer;
@@ -40,11 +41,15 @@ public class GridCell : MonoBehaviour
     /// <summary>
     /// 셀 상태 변경
     /// </summary>
-    public void SetFilled(bool filled)
+    public void SetFilled(bool filled, Color color = default)
     {
-        if (isFilled == filled) return;
+        if (isFilled == filled && color == default) return;
 
         isFilled = filled;
+        if (filled && color != default)
+        {
+            filledColor = color;
+        }
         UpdateVisual();
     }
 
@@ -57,7 +62,8 @@ public class GridCell : MonoBehaviour
 
         if (isFilled && filledMaterial != null)
         {
-            meshRenderer.material = filledMaterial;
+            meshRenderer.material = new Material(filledMaterial);
+            meshRenderer.material.color = filledColor;
         }
         else if (!isFilled && emptyMaterial != null)
         {

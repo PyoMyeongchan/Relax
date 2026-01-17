@@ -46,12 +46,12 @@ public class GridStateManager : MonoBehaviour
     /// <summary>
     /// 셀을 채움 상태로 변경
     /// </summary>
-    public void FillCell(int x, int z)
+    public void FillCell(int x, int z, Color color = default)
     {
         GridCell cell = gridSystem.GetCell(x, z);
         if (cell != null && !cell.IsFilled)
         {
-            cell.SetFilled(true);
+            cell.SetFilled(true, color);
             filledCells++;
         }
     }
@@ -72,7 +72,7 @@ public class GridStateManager : MonoBehaviour
     /// <summary>
     /// 블록을 격자에 배치 (여러 셀 채우기)
     /// </summary>
-    public void PlaceBlock(Vector2Int gridPos, bool[,] blockShape)
+    public void PlaceBlock(Vector2Int gridPos, bool[,] blockShape, Color color = default)
     {
         int blockWidth = blockShape.GetLength(0);
         int blockHeight = blockShape.GetLength(1);
@@ -83,7 +83,7 @@ public class GridStateManager : MonoBehaviour
             {
                 if (blockShape[x, z])
                 {
-                    FillCell(gridPos.x + x, gridPos.y + z);
+                    FillCell(gridPos.x + x, gridPos.y + z, color);
                 }
             }
         }

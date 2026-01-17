@@ -96,12 +96,54 @@ public class PlacementSystem : MonoBehaviour
         if (currentBlock != null)
         {
             Vector2Int gridPos = cell.GridPosition;
-            TryPlaceBlock(currentBlock, gridPos);
+            
+            // 블록의 실제 채워진 셀들의 중심점 계산
+            bool[,] shape = currentBlock.BlockShape;
+            Vector2 blockCenter = CalculateBlockCenter(shape);
+            
+            // 클릭 위치에서 블록 중심 오프셋만큼 빼서 배치 위치 계산
+            Vector2Int adjustedPos = new Vector2Int(
+                gridPos.x - Mathf.RoundToInt(blockCenter.x),
+                gridPos.y - Mathf.RoundToInt(blockCenter.y)
+            );
+            
+            TryPlaceBlock(currentBlock, adjustedPos);
             return;
         }
         
         // 선택된 블록이 없으면 배치 취소 확인
         TryRemoveBlockAtCell(cell);
+    }
+
+    /// <summary>
+    /// 블록의 실제 채워진 셀들의 중심 계산
+    /// </summary>
+    private Vector2 CalculateBlockCenter(bool[,] shape)
+    {
+        int width = shape.GetLength(0);
+        int height = shape.GetLength(1);
+        
+        float sumX = 0;
+        float sumY = 0;
+        int count = 0;
+        
+        // 채워진 셀들의 평균 위치 계산
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (shape[x, y])
+                {
+                    sumX += x;
+                    sumY += y;
+                    count++;
+                }
+            }
+        }
+        
+        if (count == 0) return Vector2.zero;
+        
+        return new Vector2(sumX / count, sumY / count);
     }
 
     /// <summary>
@@ -258,8 +300,8 @@ public class PlacementSystem : MonoBehaviour
     /// </summary>
     private void PlaceBlock(BlockObject block, Vector2Int gridPos, bool[,] shape)
     {
-        // 격자 상태 업데이트
-        stateManager.PlaceBlock(gridPos, shape);
+        // 격자 상태 업데이트 (블록 색상 전달)
+        stateManager.PlaceBlock(gridPos, shape, block.BlockColor);
 
         // 블록을 배치된 상태로 설정 (위치 정보 저장)
         block.SetPlaced(true, gridPos, shape);
@@ -384,7 +426,18 @@ public class PlacementSystem : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 100f))
         {
             Vector2Int gridPos = gridSystem.WorldToGridPosition(hit.point);
-            ShowPlacementPreview(gridPos, currentBlock.BlockShape);
+            
+            // 블록의 실제 채워진 셀들의 중심점 계산
+            bool[,] shape = currentBlock.BlockShape;
+            Vector2 blockCenter = CalculateBlockCenter(shape);
+            
+            // 조정된 위치
+            Vector2Int adjustedPos = new Vector2Int(
+                gridPos.x - Mathf.RoundToInt(blockCenter.x),
+                gridPos.y - Mathf.RoundToInt(blockCenter.y)
+            );
+            
+            ShowPlacementPreview(adjustedPos, shape);
         }
     }
 }

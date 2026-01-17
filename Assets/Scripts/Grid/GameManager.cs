@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioClip clickSfx;
     [SerializeField] private AudioClip successSfx;
     [SerializeField] private AudioClip failSfx;
+    [SerializeField] private AudioClip clearSfx; // 클리어 사운드 추가!
 
     [Header("Game State")]
     [SerializeField] private bool isGameActive;
@@ -298,7 +299,9 @@ public class GameManager : MonoBehaviour
     private void OnStageCompleted(StageData stage)
     {
         Debug.Log($"GameManager: Stage completed - {stage.stageName}");
-        PlaySFX(successSfx);
+        
+        // 클리어 사운드 재생!
+        PlaySFX(clearSfx);
     }
 
     private void OnAllStagesCompleted()

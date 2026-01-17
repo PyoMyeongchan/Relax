@@ -69,13 +69,16 @@ public class BlockSpawner : MonoBehaviour
             shapeData.UnflattenShape();
         }
         
+        // 색상도 복원
+        shapeData.LoadColor();
+        
         if (shapeData.shape == null)
         {
             Debug.LogError($"Shape still null after unflatten! Width: {shapeData.width}, Height: {shapeData.height}");
             return;
         }
 
-        Debug.Log($"Spawning block: {shapeData.width}x{shapeData.height}, cells: {shapeData.GetFilledCellCount()}");
+        Debug.Log($"Spawning block: {shapeData.width}x{shapeData.height}, cells: {shapeData.GetFilledCellCount()}, color: {shapeData.blockColor}");
 
         GameObject blockObj = new GameObject($"Block_{spawnedBlocks.Count}");
         
@@ -100,7 +103,7 @@ public class BlockSpawner : MonoBehaviour
         
         Debug.Log($"BlockObject component added. About to initialize with shape: {shapeData.width}x{shapeData.height}");
         
-        block.Initialize(shapeData.shape, blockCellPrefab, normalMaterial, selectedMaterial);
+        block.Initialize(shapeData.shape, blockCellPrefab, normalMaterial, selectedMaterial, shapeData.blockColor);
         
         Debug.Log($"BlockObject.blockShape is null after init? {block.BlockShape == null}");
 

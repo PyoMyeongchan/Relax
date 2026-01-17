@@ -21,11 +21,13 @@ public class BlockObject : MonoBehaviour
 
     public Vector2Int PlacedGridPosition => placedGridPosition;
     public bool[,] PlacedShape => placedShape;
+    public Color BlockColor => blockColor;
 
     [Header("Visual")]
     [SerializeField] private GameObject cellPrefab;
     [SerializeField] private Material normalMaterial;
     [SerializeField] private Material selectedMaterial;
+    [SerializeField] private Color blockColor = Color.white;
     [SerializeField] private float cellSize = 1f;
     [SerializeField] private float cellSpacing = 0.1f;
 
@@ -51,7 +53,7 @@ public class BlockObject : MonoBehaviour
     /// <summary>
     /// 블록 초기화
     /// </summary>
-    public void Initialize(bool[,] shape, GameObject prefab, Material normal, Material selected)
+    public void Initialize(bool[,] shape, GameObject prefab, Material normal, Material selected, Color color = default)
     {
         if (shape == null)
         {
@@ -59,17 +61,17 @@ public class BlockObject : MonoBehaviour
             return;
         }
 
-        // Clone으로 복사!
         blockShape = (bool[,])shape.Clone();
         shapeSize = new Vector2Int(shape.GetLength(0), shape.GetLength(1));
         cellPrefab = prefab;
         normalMaterial = normal;
         selectedMaterial = selected;
+        blockColor = color == default ? Color.white : color;
         isSelected = false;
         isPlaced = false;
         currentRotation = 0;
 
-        Debug.Log($"BlockObject initialized: {shapeSize.x}x{shapeSize.y}");
+        Debug.Log($"BlockObject initialized: {shapeSize.x}x{shapeSize.y}, Color: {blockColor}");
 
         CreateVisual();
     }
@@ -117,7 +119,8 @@ public class BlockObject : MonoBehaviour
                     MeshRenderer renderer = cell.GetComponent<MeshRenderer>();
                     if (renderer != null && normalMaterial != null)
                     {
-                        renderer.material = normalMaterial;
+                        renderer.material = new Material(normalMaterial);
+                        renderer.material.color = blockColor;
                     }
 
                     visualCells.Add(cell);
@@ -186,7 +189,9 @@ public class BlockObject : MonoBehaviour
                 MeshRenderer renderer = cell.GetComponent<MeshRenderer>();
                 if (renderer != null && material != null)
                 {
-                    renderer.material = material;
+                    // Material 새로 만들어서 색상 적용
+                    renderer.material = new Material(material);
+                    renderer.material.color = blockColor;
                 }
             }
         }

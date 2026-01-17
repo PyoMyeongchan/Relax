@@ -475,6 +475,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3fca8406194671642b348f234f8f4b9f, type: 2}
   - {fileID: 11400000, guid: a69af936eac1b90468d651214087d3f9, type: 2}
   - {fileID: 11400000, guid: 3756c08489c9ee8479e80ae4ddc8c29b, type: 2}
+  - {fileID: 11400000, guid: 3ee1008be3cdac940acfaf8b5cec5075, type: 2}
+  - {fileID: 11400000, guid: 14d04003023b71649b888a82bdf3fc48, type: 2}
   currentStageIndex: 0
   currentStage: {fileID: 0}
   gridSystem: {fileID: 0}
@@ -500,7 +502,7 @@ MonoBehaviour:
   normalMaterial: {fileID: 2100000, guid: 4f6715c256b89124bb53b0a0ef2ef0bd, type: 2}
   selectedMaterial: {fileID: 2100000, guid: c3efceed1798fe84381ecb12759aa325, type: 2}
   spawnParent: {fileID: 0}
-  spawnStartPosition: {x: -6, y: 0, z: 6}
+  spawnStartPosition: {x: -6, y: 0, z: 10}
   blockSpacingX: 4
   blockSpacingZ: 4
   blocksPerRow: 4
@@ -557,6 +559,7 @@ MonoBehaviour:
   clickSfx: {fileID: 8300000, guid: 29fc30d31f86a984b9a4c6f9aad80823, type: 3}
   successSfx: {fileID: 8300000, guid: 87e5f6d60ccff6c4693fd6327386daa2, type: 3}
   failSfx: {fileID: 8300000, guid: 55f467198d3ebb34784fec707600cc81, type: 3}
+  clearSfx: {fileID: 8300000, guid: 153ac2f45c16b65478f8260d6cfefae2, type: 3}
   isGameActive: 0
   isPaused: 0
 --- !u!4 &847176633
