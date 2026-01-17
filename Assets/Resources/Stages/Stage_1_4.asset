@@ -17,36 +17,44 @@ MonoBehaviour:
   gridWidth: 5
   gridHeight: 4
   blocks:
-  - width: 3
-    height: 3
+  - width: 4
+    height: 2
     blockColor: {r: 0.5, g: 0, b: 1, a: 1}
-    shapeFlattened: 010001010101010001
+    shapeFlattened: 0100010001000101
     colorR: 0.5
     colorG: 0
     colorB: 1
     colorA: 1
-  - width: 2
-    height: 3
+  - width: 4
+    height: 2
     blockColor: {r: 1, g: 0.5, b: 0, a: 1}
-    shapeFlattened: 010101010101
+    shapeFlattened: 0001000100010101
     colorR: 1
     colorG: 0.5
     colorB: 0
     colorA: 1
-  - width: 3
+  - width: 2
     height: 2
-    blockColor: {r: 1, g: 0, b: 0.3, a: 1}
-    shapeFlattened: 010101000101
+    blockColor: {r: 1, g: 0.92, b: 0.016, a: 1}
+    shapeFlattened: 01010101
     colorR: 1
-    colorG: 0
-    colorB: 0.3
+    colorG: 0.92
+    colorB: 0.016
     colorA: 1
-  - width: 3
-    height: 1
+  - width: 2
+    height: 2
     blockColor: {r: 0, g: 1, b: 0.5, a: 1}
-    shapeFlattened: 010101
+    shapeFlattened: 01010100
     colorR: 0
     colorG: 1
     colorB: 0.5
+    colorA: 1
+  - width: 2
+    height: 2
+    blockColor: {r: 0, g: 0.5, b: 1, a: 1}
+    shapeFlattened: 00010101
+    colorR: 0
+    colorG: 0.5
+    colorB: 1
     colorA: 1
   difficulty: 1

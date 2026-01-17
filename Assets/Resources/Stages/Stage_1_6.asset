@@ -10,35 +10,59 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df6a7ba30ea03d5468850ac044c5979f, type: 3}
-  m_Name: Stage_1_2
+  m_Name: Stage_1_6
   m_EditorClassIdentifier: Assembly-CSharp::StageData
-  stageName: 1-2
+  stageName: 1-6
   stageDescription: 
-  gridWidth: 4
-  gridHeight: 3
+  gridWidth: 6
+  gridHeight: 4
   blocks:
-  - width: 3
-    height: 2
+  - width: 1
+    height: 5
     blockColor: {r: 0.5, g: 0, b: 1, a: 1}
-    shapeFlattened: 010101000101
+    shapeFlattened: 0101010101
     colorR: 0.5
     colorG: 0
     colorB: 1
     colorA: 1
-  - width: 2
+  - width: 4
     height: 2
     blockColor: {r: 1, g: 0.5, b: 0, a: 1}
-    shapeFlattened: 01010100
+    shapeFlattened: 0100010001000101
     colorR: 1
     colorG: 0.5
     colorB: 0
     colorA: 1
-  - width: 2
-    height: 2
+  - width: 3
+    height: 3
     blockColor: {r: 1, g: 0.92, b: 0.016, a: 1}
-    shapeFlattened: 01010101
+    shapeFlattened: 000100010101000100
     colorR: 1
     colorG: 0.92
     colorB: 0.016
+    colorA: 1
+  - width: 2
+    height: 3
+    blockColor: {r: 1, g: 0, b: 0.3, a: 1}
+    shapeFlattened: 010100000101
+    colorR: 1
+    colorG: 0
+    colorB: 0.3
+    colorA: 1
+  - width: 2
+    height: 2
+    blockColor: {r: 0, g: 1, b: 0.5, a: 1}
+    shapeFlattened: 01010100
+    colorR: 0
+    colorG: 1
+    colorB: 0.5
+    colorA: 1
+  - width: 2
+    height: 1
+    blockColor: {r: 0, g: 0.9, b: 1, a: 1}
+    shapeFlattened: 0101
+    colorR: 0
+    colorG: 0.9
+    colorB: 1
     colorA: 1
   difficulty: 1
