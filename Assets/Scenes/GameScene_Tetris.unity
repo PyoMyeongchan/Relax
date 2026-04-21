@@ -472,13 +472,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StageManager
   allStages:
-  - {fileID: 11400000, guid: 3fca8406194671642b348f234f8f4b9f, type: 2}
-  - {fileID: 11400000, guid: a69af936eac1b90468d651214087d3f9, type: 2}
-  - {fileID: 11400000, guid: 3756c08489c9ee8479e80ae4ddc8c29b, type: 2}
-  - {fileID: 11400000, guid: 3ee1008be3cdac940acfaf8b5cec5075, type: 2}
-  - {fileID: 11400000, guid: 14d04003023b71649b888a82bdf3fc48, type: 2}
+  - {fileID: 11400000, guid: 67c054ef7d443234283c5fad476108ee, type: 2}
+  - {fileID: 11400000, guid: 67c054ef7d443234283c5fad476108ee, type: 2}
   - {fileID: 11400000, guid: 2b10b61262e85024badba98e4d9277f4, type: 2}
   - {fileID: 11400000, guid: 67c054ef7d443234283c5fad476108ee, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   currentStageIndex: 0
   currentStage: {fileID: 0}
   gridSystem: {fileID: 0}

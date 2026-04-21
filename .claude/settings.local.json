@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "mcp__mcp-unity__recompile_scripts",
+      "mcp__mcp-unity__create_scene",
+      "mcp__mcp-unity__get_scene_info",
+      "mcp__mcp-unity__update_gameobject",
+      "mcp__mcp-unity__update_component",
+      "mcp__mcp-unity__execute_menu_item",
+      "mcp__mcp-unity__get_console_logs",
+      "mcp__mcp-unity__batch_execute",
+      "mcp__mcp-unity__save_scene",
+      "mcp__mcp-unity__load_scene",
+      "mcp__mcp-unity__get_gameobject",
+      "Bash(awk '/^--- !u!114 &11400000/,/^---/{print NR\": \"$0}' \"C:\\\\Users\\\\user\\\\Documents\\\\GitHub\\\\Relax\\\\Assets\\\\Font\\\\Noto_Sans_KR\\\\NotoSansKR-VariableFont_wght SDF.asset\")",
+      "Bash(python3 *)",
+      "Bash(python \"C:/Users/user/Documents/GitHub/Relax/Assets/Scenes/LobbyScene.unity\")",
+      "Bash(py --version)",
+      "mcp__mcp-unity__delete_gameobject"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "mcp-unity"
+  ]
+}
