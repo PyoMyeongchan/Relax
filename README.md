@@ -64,7 +64,10 @@ Assets/
 
 ## 🏗️ 시스템 아키텍처
 
-> 📐 **전체 아키텍처 다이어그램 (FigJam)**: [시스템별 전체 아키텍처 보기](https://www.figma.com/online-whiteboard/create-diagram/7b09cc90-b454-4ae8-8325-251c82e41c97?utm_source=claude&utm_content=edit_in_figjam)
+> 📐 **상세 아키텍처 다이어그램 (FigJam)**: [시스템별 전체 보기](https://www.figma.com/online-whiteboard/create-diagram/7b09cc90-b454-4ae8-8325-251c82e41c97?utm_source=claude&utm_content=edit_in_figjam)
+
+<details>
+<summary>개별 시스템 다이어그램 보기</summary>
 
 | 다이어그램 | 링크 |
 |-----------|------|
@@ -75,34 +78,11 @@ Assets/
 | ⑤ 입력 & 배치 흐름 | [보기](https://www.figma.com/online-whiteboard/create-diagram/72b71ed9-fb0e-4a84-bba3-272bb1198cb2?utm_source=claude&utm_content=edit_in_figjam) |
 | ⑥ 로비 씬 | [보기](https://www.figma.com/online-whiteboard/create-diagram/c6f9eb02-2993-4797-b6df-260a0b54e743?utm_source=claude&utm_content=edit_in_figjam) |
 
-### 구조 요약
+</details>
 
-```
-GameManager (Singleton)
-    │
-    ├─── StageManager ──────── StageData
-    │       ├─ 스테이지 로드/진행/클리어
-    │       ├─ GridSystem 초기화
-    │       ├─ BlockSpawner 호출
-    │       └─ PlacementSystem 감지
-    │
-    ├─── GridSystem ─────────── GridCell
-    │       └─ GridStateManager
-    │               ├─ 셀 채움/비움 상태 관리
-    │               └─ 격자 완전 채워짐 검증
-    │
-    ├─── BlockSpawner ──────── BlockObject
-    │       └─ BlockShapeData 기반 블록 생성
-    │
-    ├─── PlacementSystem
-    │       ├─ 배치 가능 여부 검증
-    │       ├─ 프리뷰 표시
-    │       └─ 격자에 블록 배치
-    │
-    └─── InputManager
-            ├─ 블록 클릭 → 선택
-            └─ 셀 클릭 → 배치 시도
-```
+### 전체 의존성 구조
+
+![Architecture](docs/architecture.png)
 
 ---
 
