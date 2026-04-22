@@ -17,8 +17,8 @@ MonoBehaviour:
   gridWidth: 6
   gridHeight: 4
   blocks:
-  - width: 1
-    height: 5
+  - width: 5
+    height: 1
     blockColor: {r: 0.5, g: 0, b: 1, a: 1}
     shapeFlattened: 0101010101
     colorR: 0.5

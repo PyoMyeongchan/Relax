@@ -34,9 +34,6 @@ public class GameCard : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         {
             bool locked = !info.isUnlocked;
             playButton.interactable = !locked;
-            playButton.onClick.RemoveAllListeners();
-            playButton.onClick.AddListener(OnPlayClicked);
-            Debug.Log($"[GameCard] playButton interactable={playButton.interactable}, listenerCount={playButton.onClick.GetPersistentEventCount()}");
             if (lockOverlay != null)
                 lockOverlay.SetActive(locked);
         }

@@ -60,6 +60,15 @@ public class StageData : ScriptableObject
                 Debug.LogError($"[{stageName}] Invalid block found!");
                 return false;
             }
+
+            // 블록이 회전 포함 어떤 방향으로도 그리드에 들어갈 수 없으면 에러
+            bool fitsNormal  = block.width <= gridWidth && block.height <= gridHeight;
+            bool fitsRotated = block.height <= gridWidth && block.width <= gridHeight;
+            if (!fitsNormal && !fitsRotated)
+            {
+                Debug.LogError($"[{stageName}] Block ({block.width}x{block.height}) cannot fit in grid ({gridWidth}x{gridHeight}) in any rotation!");
+                return false;
+            }
         }
 
         // 블록들이 격자를 채울 수 있는지 체크

@@ -63,7 +63,6 @@ public class GameManager : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
 
         // 컴포넌트 자동 찾기
         FindComponents();
@@ -357,6 +356,8 @@ public class GameManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (instance == this) instance = null;
+
         // 이벤트 해제
         if (inputManager != null)
         {
