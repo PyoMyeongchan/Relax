@@ -64,26 +64,38 @@ Assets/
 
 ## 🏗️ 시스템 아키텍처
 
+> 📐 **전체 아키텍처 다이어그램 (FigJam)**: [시스템별 전체 아키텍처 보기](https://www.figma.com/online-whiteboard/create-diagram/7b09cc90-b454-4ae8-8325-251c82e41c97?utm_source=claude&utm_content=edit_in_figjam)
+
+| 다이어그램 | 링크 |
+|-----------|------|
+| ① GameManager 오케스트레이션 | [보기](https://www.figma.com/online-whiteboard/create-diagram/33e92f7e-10a1-4bde-b034-0aaf08f5bb9f?utm_source=claude&utm_content=edit_in_figjam) |
+| ② 스테이지 흐름 | [보기](https://www.figma.com/online-whiteboard/create-diagram/f2edab0e-0d87-41d6-8eff-aae21035efbd?utm_source=claude&utm_content=edit_in_figjam) |
+| ③ 격자 시스템 | [보기](https://www.figma.com/online-whiteboard/create-diagram/7bb8b998-8579-48c5-982f-2af5972061e3?utm_source=claude&utm_content=edit_in_figjam) |
+| ④ 블록 시스템 | [보기](https://www.figma.com/online-whiteboard/create-diagram/3a93bfca-0b7f-4e7a-903f-6749f27c07da?utm_source=claude&utm_content=edit_in_figjam) |
+| ⑤ 입력 & 배치 흐름 | [보기](https://www.figma.com/online-whiteboard/create-diagram/72b71ed9-fb0e-4a84-bba3-272bb1198cb2?utm_source=claude&utm_content=edit_in_figjam) |
+| ⑥ 로비 씬 | [보기](https://www.figma.com/online-whiteboard/create-diagram/c6f9eb02-2993-4797-b6df-260a0b54e743?utm_source=claude&utm_content=edit_in_figjam) |
+
+### 구조 요약
+
 ```
 GameManager (Singleton)
     │
-    ├─── StageManager
-    │       ├─ 현재 스테이지 정보
-    │       ├─ StageData 로드
-    │       └─ 클리어 체크
+    ├─── StageManager ──────── StageData
+    │       ├─ 스테이지 로드/진행/클리어
+    │       ├─ GridSystem 초기화
+    │       ├─ BlockSpawner 호출
+    │       └─ PlacementSystem 감지
     │
-    ├─── GridSystem
-    │       ├─ 격자 생성
-    │       ├─ GridCell[] 관리
-    │       ├─ 셀 상태 관리
-    │       └─ 전체 채워짐 검증
+    ├─── GridSystem ─────────── GridCell
+    │       └─ GridStateManager
+    │               ├─ 셀 채움/비움 상태 관리
+    │               └─ 격자 완전 채워짐 검증
     │
-    ├─── BlockSpawner
-    │       ├─ StageData 기반 블록 생성
-    │       └─ 대기 영역에 배치
+    ├─── BlockSpawner ──────── BlockObject
+    │       └─ BlockShapeData 기반 블록 생성
     │
     ├─── PlacementSystem
-    │       ├─ 배치 가능 여부 체크
+    │       ├─ 배치 가능 여부 검증
     │       ├─ 프리뷰 표시
     │       └─ 격자에 블록 배치
     │
@@ -232,11 +244,14 @@ public class BlockShapeData
 
 1. ✅ 프로젝트 구조 설계
 2. ✅ 사운드 에셋 준비
-3. ⬜ GridSystem 구현
-4. ⬜ BlockObject 구현
-5. ⬜ InputManager 구현
-6. ⬜ PlacementSystem 구현
-7. ⬜ StageManager 구현
-8. ⬜ 사운드 통합
-9. ⬜ 첫 스테이지 테스트
-10. ⬜ 스테이지 3개 완성
+3. ✅ GridSystem 구현
+4. ✅ BlockObject 구현
+5. ✅ InputManager 구현
+6. ✅ PlacementSystem 구현
+7. ✅ StageManager 구현
+8. ✅ GridStateManager 구현
+9. ✅ BlockSpawner 구현
+10. ✅ 로비 씬 구현 (LobbyManager, GameCard, SceneLoader)
+11. ⬜ 사운드 통합
+12. ⬜ 첫 스테이지 테스트
+13. ⬜ 스테이지 3개 완성
