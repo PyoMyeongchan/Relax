@@ -632,4 +632,405 @@ public class StageCreatorHelper : MonoBehaviour
         Selection.activeObject = stage;
         #endif
     }
+
+    // Stage 1-8 (6x6 = 36칸) - 난이도 4
+    // 큰L(6) + 큰J(6) + 십자(5) + L긴(5) + Z자(4) + S자(4) + ㄴ자(3) + ㄱ자(3) = 36칸 ✓
+    // 풀이 힌트: 큰L은 오른쪽 하단, 큰J는 왼쪽 하단, 십자는 중앙, 나머지로 상단 채우기
+    [ContextMenu("Create Stage 1-8 (6x6)")]
+    void CreateStage1_8()
+    {
+        #if UNITY_EDITOR
+        StageData stage = ScriptableObject.CreateInstance<StageData>();
+        stage.stageName = "1-8";
+        stage.gridWidth = 6;
+        stage.gridHeight = 6;
+        stage.difficulty = 4;
+
+        // 큰L자 (보라색) - 6칸
+        // ■
+        // ■
+        // ■
+        // ■■■
+        BlockShapeData bigL = new BlockShapeData(4, 3);
+        bigL.shape = new bool[4, 3] {
+            { true, false, false },
+            { true, false, false },
+            { true, false, false },
+            { true, true, true }
+        };
+        bigL.blockColor = new Color(0.5f, 0f, 1f);
+        bigL.SaveColor();
+        bigL.FlattenShape();
+        stage.blocks.Add(bigL);
+
+        // 큰J자 (주황색) - 6칸
+        //   ■
+        //   ■
+        //   ■
+        // ■■■
+        BlockShapeData bigJ = new BlockShapeData(4, 3);
+        bigJ.shape = new bool[4, 3] {
+            { false, false, true },
+            { false, false, true },
+            { false, false, true },
+            { true,  true,  true }
+        };
+        bigJ.blockColor = new Color(1f, 0.5f, 0f);
+        bigJ.SaveColor();
+        bigJ.FlattenShape();
+        stage.blocks.Add(bigJ);
+
+        // 십자 (노란색) - 5칸
+        //  ■
+        // ■■■
+        //  ■
+        BlockShapeData cross = new BlockShapeData(3, 3);
+        cross.shape = new bool[3, 3] {
+            { false, true, false },
+            { true,  true, true  },
+            { false, true, false }
+        };
+        cross.blockColor = new Color(1f, 0.92f, 0.016f);
+        cross.SaveColor();
+        cross.FlattenShape();
+        stage.blocks.Add(cross);
+
+        // L긴자 (파란색) - 5칸
+        // ■
+        // ■
+        // ■
+        // ■■
+        BlockShapeData lLong = new BlockShapeData(4, 2);
+        lLong.shape = new bool[4, 2] {
+            { true, false },
+            { true, false },
+            { true, false },
+            { true, true  }
+        };
+        lLong.blockColor = new Color(0f, 0.5f, 1f);
+        lLong.SaveColor();
+        lLong.FlattenShape();
+        stage.blocks.Add(lLong);
+
+        // Z자 (빨간색) - 4칸
+        // ■■
+        //  ■■
+        BlockShapeData zBlock = new BlockShapeData(2, 3);
+        zBlock.shape = new bool[2, 3] {
+            { true,  true,  false },
+            { false, true,  true  }
+        };
+        zBlock.blockColor = new Color(1f, 0f, 0.3f);
+        zBlock.SaveColor();
+        zBlock.FlattenShape();
+        stage.blocks.Add(zBlock);
+
+        // S자 (초록색) - 4칸
+        //  ■■
+        // ■■
+        BlockShapeData sBlock = new BlockShapeData(2, 3);
+        sBlock.shape = new bool[2, 3] {
+            { false, true, true  },
+            { true,  true, false }
+        };
+        sBlock.blockColor = new Color(0f, 1f, 0.5f);
+        sBlock.SaveColor();
+        sBlock.FlattenShape();
+        stage.blocks.Add(sBlock);
+
+        // ㄴ자 (분홍색) - 3칸
+        // ■■
+        // ■
+        BlockShapeData lSmall = new BlockShapeData(2, 2);
+        lSmall.shape = new bool[2, 2] {
+            { true, true },
+            { true, false }
+        };
+        lSmall.blockColor = new Color(1f, 0.4f, 0.7f);
+        lSmall.SaveColor();
+        lSmall.FlattenShape();
+        stage.blocks.Add(lSmall);
+
+        // ㄱ자 (하늘색) - 3칸
+        //  ■
+        // ■■
+        BlockShapeData gSmall = new BlockShapeData(2, 2);
+        gSmall.shape = new bool[2, 2] {
+            { false, true },
+            { true,  true }
+        };
+        gSmall.blockColor = new Color(0f, 0.9f, 1f);
+        gSmall.SaveColor();
+        gSmall.FlattenShape();
+        stage.blocks.Add(gSmall);
+
+        string path = "Assets/Resources/Stages/Stage_1_8.asset";
+        AssetDatabase.CreateAsset(stage, path);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        Debug.Log("Stage 1-8 created: 큰L(6)+큰J(6)+십자(5)+L긴(5)+Z(4)+S(4)+ㄴ(3)+ㄱ(3) = 36 cells ✓");
+        Selection.activeObject = stage;
+        #endif
+    }
+
+    // Stage 1-9 (7x5 = 35칸) - 난이도 4
+    // ㅡ자7(7) + 큰L(6) + 십자(5) + L긴(5) + ㄴ긴(5) + Z자(4) + ㄴ자(3) = 35칸 ✓
+    // ㅡ자7은 세로(1x7)로 스폰되나 7칸 가로로 회전 필수
+    [ContextMenu("Create Stage 1-9 (7x5)")]
+    void CreateStage1_9()
+    {
+        #if UNITY_EDITOR
+        StageData stage = ScriptableObject.CreateInstance<StageData>();
+        stage.stageName = "1-9";
+        stage.gridWidth = 7;
+        stage.gridHeight = 5;
+        stage.difficulty = 4;
+
+        // ㅡ자 7칸 (보라색) - 7칸, 회전 필수
+        // ■■■■■■■
+        BlockShapeData hLine7 = new BlockShapeData(1, 7);
+        hLine7.shape = new bool[1, 7] {
+            { true, true, true, true, true, true, true }
+        };
+        hLine7.blockColor = new Color(0.5f, 0f, 1f);
+        hLine7.SaveColor();
+        hLine7.FlattenShape();
+        stage.blocks.Add(hLine7);
+
+        // 큰L자 (주황색) - 6칸
+        // ■
+        // ■
+        // ■
+        // ■■■
+        BlockShapeData bigL = new BlockShapeData(4, 3);
+        bigL.shape = new bool[4, 3] {
+            { true, false, false },
+            { true, false, false },
+            { true, false, false },
+            { true, true,  true  }
+        };
+        bigL.blockColor = new Color(1f, 0.5f, 0f);
+        bigL.SaveColor();
+        bigL.FlattenShape();
+        stage.blocks.Add(bigL);
+
+        // 십자 (노란색) - 5칸
+        BlockShapeData cross = new BlockShapeData(3, 3);
+        cross.shape = new bool[3, 3] {
+            { false, true, false },
+            { true,  true, true  },
+            { false, true, false }
+        };
+        cross.blockColor = new Color(1f, 0.92f, 0.016f);
+        cross.SaveColor();
+        cross.FlattenShape();
+        stage.blocks.Add(cross);
+
+        // L긴자 (파란색) - 5칸
+        BlockShapeData lLong = new BlockShapeData(4, 2);
+        lLong.shape = new bool[4, 2] {
+            { true, false },
+            { true, false },
+            { true, false },
+            { true, true  }
+        };
+        lLong.blockColor = new Color(0f, 0.5f, 1f);
+        lLong.SaveColor();
+        lLong.FlattenShape();
+        stage.blocks.Add(lLong);
+
+        // ㄴ긴자 (초록색) - 5칸
+        //  ■
+        //  ■
+        //  ■
+        // ■■
+        BlockShapeData nLong = new BlockShapeData(4, 2);
+        nLong.shape = new bool[4, 2] {
+            { false, true },
+            { false, true },
+            { false, true },
+            { true,  true }
+        };
+        nLong.blockColor = new Color(0f, 1f, 0.5f);
+        nLong.SaveColor();
+        nLong.FlattenShape();
+        stage.blocks.Add(nLong);
+
+        // Z자 (빨간색) - 4칸
+        BlockShapeData zBlock = new BlockShapeData(2, 3);
+        zBlock.shape = new bool[2, 3] {
+            { true,  true,  false },
+            { false, true,  true  }
+        };
+        zBlock.blockColor = new Color(1f, 0f, 0.3f);
+        zBlock.SaveColor();
+        zBlock.FlattenShape();
+        stage.blocks.Add(zBlock);
+
+        // ㄴ자 (분홍색) - 3칸
+        BlockShapeData lSmall = new BlockShapeData(2, 2);
+        lSmall.shape = new bool[2, 2] {
+            { true, true },
+            { true, false }
+        };
+        lSmall.blockColor = new Color(1f, 0.4f, 0.7f);
+        lSmall.SaveColor();
+        lSmall.FlattenShape();
+        stage.blocks.Add(lSmall);
+
+        string path = "Assets/Resources/Stages/Stage_1_9.asset";
+        AssetDatabase.CreateAsset(stage, path);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        Debug.Log("Stage 1-9 created: ㅡ7(7)+큰L(6)+십자(5)+L긴(5)+ㄴ긴(5)+Z(4)+ㄴ(3) = 35 cells ✓");
+        Selection.activeObject = stage;
+        #endif
+    }
+
+    // Stage 1-10 (7x6 = 42칸) - 난이도 5 (최종 보스)
+    // ㅡ자7(7) + 큰L(6) + 큰J(6) + 십자(5) + L긴(5) + ㄴ긴(5) + Z자(4) + S자(4) + ㄴ자(3) + ㄱ자(3) - 2 = 42칸
+    // 큰L(6) + 큰J(6) + 십자(5) + L긴(5) + ㄴ긴(5) + Z자(4) + S자(4) + ㄴ자(3) + ㄱ자(3) + 가로2(2) = 43 ...
+    // 큰L(6)+큰J(6)+십자(5)+L긴(5)+ㄴ긴(5)+Z(4)+S(4)+ㄴ(3)+ㄱ(3)+도미노(1=2x1)=43 너무많다
+    // 큰L(6)+큰J(6)+십자(5)+L긴(5)+ㄴ긴(5)+Z(4)+S(4)+ㄴ(3)+도미노(2)+단일(1) -- 어림도없다
+    // 큰L(6)+큰J(6)+십자(5)+L긴(5)+ㄴ긴(5)+Z자(4)+S자(4)+ㄴ자(3)+ㄱ자(3) = 41 + 도미노(1) nope
+    // 6+6+6+5+5+4+4+3+3 = 42 ✓ → 큰L, 큰J, 큰T(3x4=6), L긴(5), ㄴ긴(5), Z(4), S(4), ㄴ(3), ㄱ(3)
+    [ContextMenu("Create Stage 1-10 (7x6)")]
+    void CreateStage1_10()
+    {
+        #if UNITY_EDITOR
+        StageData stage = ScriptableObject.CreateInstance<StageData>();
+        stage.stageName = "1-10";
+        stage.gridWidth = 7;
+        stage.gridHeight = 6;
+        stage.difficulty = 5;
+
+        // 큰L자 (보라색) - 6칸
+        // ■
+        // ■
+        // ■
+        // ■■■
+        BlockShapeData bigL = new BlockShapeData(4, 3);
+        bigL.shape = new bool[4, 3] {
+            { true, false, false },
+            { true, false, false },
+            { true, false, false },
+            { true, true,  true  }
+        };
+        bigL.blockColor = new Color(0.5f, 0f, 1f);
+        bigL.SaveColor();
+        bigL.FlattenShape();
+        stage.blocks.Add(bigL);
+
+        // 큰J자 (주황색) - 6칸
+        //   ■
+        //   ■
+        //   ■
+        // ■■■
+        BlockShapeData bigJ = new BlockShapeData(4, 3);
+        bigJ.shape = new bool[4, 3] {
+            { false, false, true },
+            { false, false, true },
+            { false, false, true },
+            { true,  true,  true }
+        };
+        bigJ.blockColor = new Color(1f, 0.5f, 0f);
+        bigJ.SaveColor();
+        bigJ.FlattenShape();
+        stage.blocks.Add(bigJ);
+
+        // 큰T자 (노란색) - 6칸 (3x4 T형)
+        //  ■
+        //  ■
+        // ■■■
+        //  ■
+        BlockShapeData bigT = new BlockShapeData(4, 3);
+        bigT.shape = new bool[4, 3] {
+            { false, true,  false },
+            { false, true,  false },
+            { true,  true,  true  },
+            { false, true,  false }
+        };
+        bigT.blockColor = new Color(1f, 0.92f, 0.016f);
+        bigT.SaveColor();
+        bigT.FlattenShape();
+        stage.blocks.Add(bigT);
+
+        // L긴자 (파란색) - 5칸
+        BlockShapeData lLong = new BlockShapeData(4, 2);
+        lLong.shape = new bool[4, 2] {
+            { true, false },
+            { true, false },
+            { true, false },
+            { true, true  }
+        };
+        lLong.blockColor = new Color(0f, 0.5f, 1f);
+        lLong.SaveColor();
+        lLong.FlattenShape();
+        stage.blocks.Add(lLong);
+
+        // ㄴ긴자 (초록색) - 5칸
+        BlockShapeData nLong = new BlockShapeData(4, 2);
+        nLong.shape = new bool[4, 2] {
+            { false, true },
+            { false, true },
+            { false, true },
+            { true,  true }
+        };
+        nLong.blockColor = new Color(0f, 1f, 0.5f);
+        nLong.SaveColor();
+        nLong.FlattenShape();
+        stage.blocks.Add(nLong);
+
+        // Z자 (빨간색) - 4칸
+        BlockShapeData zBlock = new BlockShapeData(2, 3);
+        zBlock.shape = new bool[2, 3] {
+            { true,  true,  false },
+            { false, true,  true  }
+        };
+        zBlock.blockColor = new Color(1f, 0f, 0.3f);
+        zBlock.SaveColor();
+        zBlock.FlattenShape();
+        stage.blocks.Add(zBlock);
+
+        // S자 (분홍색) - 4칸
+        BlockShapeData sBlock = new BlockShapeData(2, 3);
+        sBlock.shape = new bool[2, 3] {
+            { false, true, true  },
+            { true,  true, false }
+        };
+        sBlock.blockColor = new Color(1f, 0.4f, 0.7f);
+        sBlock.SaveColor();
+        sBlock.FlattenShape();
+        stage.blocks.Add(sBlock);
+
+        // ㄴ자 (하늘색) - 3칸
+        BlockShapeData lSmall = new BlockShapeData(2, 2);
+        lSmall.shape = new bool[2, 2] {
+            { true, true },
+            { true, false }
+        };
+        lSmall.blockColor = new Color(0f, 0.9f, 1f);
+        lSmall.SaveColor();
+        lSmall.FlattenShape();
+        stage.blocks.Add(lSmall);
+
+        // ㄱ자 (빨간주황색) - 3칸
+        BlockShapeData gSmall = new BlockShapeData(2, 2);
+        gSmall.shape = new bool[2, 2] {
+            { false, true },
+            { true,  true }
+        };
+        gSmall.blockColor = new Color(1f, 0.3f, 0f);
+        gSmall.SaveColor();
+        gSmall.FlattenShape();
+        stage.blocks.Add(gSmall);
+
+        string path = "Assets/Resources/Stages/Stage_1_10.asset";
+        AssetDatabase.CreateAsset(stage, path);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        Debug.Log("Stage 1-10 created: 큰L(6)+큰J(6)+큰T(6)+L긴(5)+ㄴ긴(5)+Z(4)+S(4)+ㄴ(3)+ㄱ(3) = 42 cells ✓");
+        Selection.activeObject = stage;
+        #endif
+    }
 }

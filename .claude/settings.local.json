@@ -17,7 +17,8 @@
       "Bash(python3 *)",
       "Bash(python \"C:/Users/user/Documents/GitHub/Relax/Assets/Scenes/LobbyScene.unity\")",
       "Bash(py --version)",
-      "mcp__mcp-unity__delete_gameobject"
+      "mcp__mcp-unity__delete_gameobject",
+      "Bash(python *)"
     ]
   },
   "enableAllProjectMcpServers": true,
