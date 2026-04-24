@@ -153,13 +153,15 @@ public class StageManager : MonoBehaviour
 
         // 격자 생성
         gridSystem.CreateGrid(currentStage.gridWidth, currentStage.gridHeight);
-        
-        // StateManager 초기화 (중요!)
-        stateManager.Initialize(currentStage.gridWidth, currentStage.gridHeight);
-        Debug.Log($"StateManager initialized: {currentStage.gridWidth}x{currentStage.gridHeight}");
 
-        // 블록 생성
-        blockSpawner.SpawnBlocks(currentStage.blocks);
+        // StateManager 초기화
+        stateManager.Initialize(currentStage.gridWidth, currentStage.gridHeight);
+
+        // 난이도 설정 적용
+        placementSystem?.Configure(currentStage.ShowPlacementPreview, currentStage.MaxRemovals);
+
+        // 블록 생성 (difficulty 4+ 이면 순서 셔플)
+        blockSpawner.SpawnBlocks(currentStage.blocks, currentStage.ShuffleBlocks);
 
         // 스테이지 활성화
         isStageActive = true;

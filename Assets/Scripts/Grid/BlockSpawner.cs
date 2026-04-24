@@ -26,7 +26,9 @@ public class BlockSpawner : MonoBehaviour
     /// <summary>
     /// 스테이지 데이터로부터 블록들 생성
     /// </summary>
-    public void SpawnBlocks(List<BlockShapeData> blockShapes)
+    /// <param name="blockShapes">블록 목록</param>
+    /// <param name="shuffle">true이면 스폰 순서를 무작위로 섞음 (difficulty 4+)</param>
+    public void SpawnBlocks(List<BlockShapeData> blockShapes, bool shuffle = false)
     {
         ClearBlocks();
 
@@ -36,19 +38,29 @@ public class BlockSpawner : MonoBehaviour
             return;
         }
 
-        for (int i = 0; i < blockShapes.Count; i++)
+        List<BlockShapeData> ordered = new List<BlockShapeData>(blockShapes);
+        if (shuffle)
+            Shuffle(ordered);
+
+        for (int i = 0; i < ordered.Count; i++)
         {
-            // 그리드 형태로 배치 (4개씩 한 줄)
             int row = i / blocksPerRow;
             int col = i % blocksPerRow;
-            
-            Vector3 spawnPos = spawnStartPosition + 
+            Vector3 spawnPos = spawnStartPosition +
                                new Vector3(col * blockSpacingX, 0f, -row * blockSpacingZ);
-            
-            SpawnBlock(blockShapes[i], spawnPos);
+            SpawnBlock(ordered[i], spawnPos);
         }
 
-        Debug.Log($"Spawned {spawnedBlocks.Count} blocks in grid layout");
+        Debug.Log($"Spawned {spawnedBlocks.Count} blocks (shuffle={shuffle})");
+    }
+
+    private static void Shuffle<T>(List<T> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            (list[i], list[j]) = (list[j], list[i]);
+        }
     }
 
     /// <summary>
@@ -62,23 +74,16 @@ public class BlockSpawner : MonoBehaviour
             return;
         }
 
-        // 무조건 Unflatten 시도
         if (shapeData.shape == null)
-        {
-            Debug.Log("Shape is null, attempting to unflatten...");
             shapeData.UnflattenShape();
-        }
-        
-        // 색상도 복원
+
         shapeData.LoadColor();
-        
+
         if (shapeData.shape == null)
         {
             Debug.LogError($"Shape still null after unflatten! Width: {shapeData.width}, Height: {shapeData.height}");
             return;
         }
-
-        Debug.Log($"Spawning block: {shapeData.width}x{shapeData.height}, cells: {shapeData.GetFilledCellCount()}, color: {shapeData.blockColor}");
 
         GameObject blockObj = new GameObject($"Block_{spawnedBlocks.Count}");
         
@@ -100,12 +105,8 @@ public class BlockSpawner : MonoBehaviour
             Debug.LogError("Failed to add BlockObject component!");
             return;
         }
-        
-        Debug.Log($"BlockObject component added. About to initialize with shape: {shapeData.width}x{shapeData.height}");
-        
+
         block.Initialize(shapeData.shape, blockCellPrefab, normalMaterial, selectedMaterial, shapeData.blockColor);
-        
-        Debug.Log($"BlockObject.blockShape is null after init? {block.BlockShape == null}");
 
         spawnedBlocks.Add(block);
     }

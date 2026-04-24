@@ -43,8 +43,8 @@ public class LobbySetupHelper
     static void CreateTetrisGameInfo()
     {
         GameInfo info = ScriptableObject.CreateInstance<GameInfo>();
-        info.gameName = "블록 채우기";
-        info.description = "다양한 모양의 블록을 격자에 완벽하게 채워보세요.";
+        info.gameName = "Block Puzzle";
+        info.description = "Place all the blocks to fill the grid perfectly.";
         info.sceneName = "GameScene_Tetris";
         info.accentColor = new Color(0.2f, 0.6f, 1f);
         info.isUnlocked = true;

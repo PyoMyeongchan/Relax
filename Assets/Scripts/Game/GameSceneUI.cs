@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 게임 씬 내 UI (로비 복귀 버튼 등)
+/// In-game scene UI (back to lobby button, etc.)
 /// </summary>
 public class GameSceneUI : MonoBehaviour
 {

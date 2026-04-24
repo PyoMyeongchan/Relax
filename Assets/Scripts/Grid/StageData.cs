@@ -33,6 +33,17 @@ public class StageData : ScriptableObject
     [Range(1, 5)]
     public int difficulty = 1;
 
+    // --- Difficulty-derived gameplay settings ---
+
+    /// <summary>difficulty 4 이상이면 스폰 순서를 무작위로 섞음</summary>
+    public bool ShuffleBlocks => difficulty >= 4;
+
+    /// <summary>difficulty 5에서는 배치 프리뷰(녹색/빨간색 하이라이트) 비활성화</summary>
+    public bool ShowPlacementPreview => difficulty < 5;
+
+    /// <summary>블록을 되돌릴 수 있는 최대 횟수. -1 = 무제한 (difficulty 5에서는 3회)</summary>
+    public int MaxRemovals => difficulty >= 5 ? 3 : -1;
+
     /// <summary>
     /// 스테이지 검증
     /// </summary>

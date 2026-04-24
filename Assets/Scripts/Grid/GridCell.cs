@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 개별 격자 셀 (위치, 상태 관리)
+/// Individual grid cell — position and fill state.
 /// </summary>
 public class GridCell : MonoBehaviour
 {
@@ -19,27 +19,23 @@ public class GridCell : MonoBehaviour
     public bool IsFilled => isFilled;
 
     /// <summary>
-    /// 셀 초기화
+    /// Initialize the cell at the given grid coordinates.
     /// </summary>
     public void Initialize(int x, int z, float size)
     {
         gridPosition = new Vector2Int(x, z);
         isFilled = false;
 
-        // 크기 조정
         transform.localScale = new Vector3(size, 0.1f, size);
 
-        // MeshRenderer 자동 찾기
         if (meshRenderer == null)
-        {
             meshRenderer = GetComponent<MeshRenderer>();
-        }
 
         UpdateVisual();
     }
 
     /// <summary>
-    /// 셀 상태 변경
+    /// Set the fill state of this cell.
     /// </summary>
     public void SetFilled(bool filled, Color color = default)
     {
@@ -47,15 +43,11 @@ public class GridCell : MonoBehaviour
 
         isFilled = filled;
         if (filled && color != default)
-        {
             filledColor = color;
-        }
+
         UpdateVisual();
     }
 
-    /// <summary>
-    /// 시각적 업데이트
-    /// </summary>
     private void UpdateVisual()
     {
         if (meshRenderer == null) return;
@@ -72,23 +64,18 @@ public class GridCell : MonoBehaviour
     }
 
     /// <summary>
-    /// 하이라이트 표시 (배치 가능 위치 미리보기)
+    /// Highlight this cell for placement preview.
     /// </summary>
     public void SetHighlight(bool highlight, Color highlightColor)
     {
         if (meshRenderer == null) return;
 
         if (highlight)
-        {
             meshRenderer.material.color = highlightColor;
-        }
         else
-        {
             UpdateVisual();
-        }
     }
 
-    // 디버그용
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = isFilled ? Color.red : Color.green;

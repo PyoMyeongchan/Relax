@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 
 /// <summary>
-/// 클릭 입력 처리 (New Input System 사용)
+/// Handles click/touch input using the New Input System.
 /// </summary>
 public class InputManager : MonoBehaviour
 {
@@ -16,13 +16,12 @@ public class InputManager : MonoBehaviour
     [Header("Current State")]
     [SerializeField] private BlockObject selectedBlock;
 
-    // 이벤트
+    // Events
     public System.Action<BlockObject> OnBlockSelected;
     public System.Action<BlockObject> OnBlockDeselected;
     public System.Action<GridCell> OnGridCellClicked;
     public System.Action<Vector3> OnEmptySpaceClicked;
 
-    // New Input System
     private PlayerInput playerInput;
     private InputAction tapAction;
     private InputAction positionAction;
@@ -31,99 +30,75 @@ public class InputManager : MonoBehaviour
     private void Awake()
     {
         if (mainCamera == null)
-        {
             mainCamera = Camera.main;
-        }
 
         if (mainCamera == null)
-        {
             Debug.LogError("Main Camera not found!");
-        }
 
         SetupInputActions();
     }
 
-    /// <summary>
-    /// Input Actions 설정
-    /// </summary>
     private void SetupInputActions()
     {
-        // Input Actions 생성
         var inputActionAsset = ScriptableObject.CreateInstance<InputActionAsset>();
-        
         var gameplayMap = inputActionAsset.AddActionMap("Gameplay");
-        
-        // Tap/Click Action
+
+        // Tap / click
         tapAction = gameplayMap.AddAction("Tap", InputActionType.Button);
         tapAction.AddBinding("<Mouse>/leftButton");
         tapAction.AddBinding("<Touchscreen>/primaryTouch/press");
-        
-        // Position Action (마우스/터치 위치)
+
+        // Pointer position
         positionAction = gameplayMap.AddAction("Position", InputActionType.Value);
         positionAction.AddBinding("<Mouse>/position");
         positionAction.AddBinding("<Touchscreen>/primaryTouch/position");
-        
-        // Rotate Action (스페이스바)
+
+        // Rotate (spacebar)
         rotateAction = gameplayMap.AddAction("Rotate", InputActionType.Button);
         rotateAction.AddBinding("<Keyboard>/space");
-        
-        // Enable
+
         gameplayMap.Enable();
-        
-        // 이벤트 연결
+
         tapAction.performed += OnTapPerformed;
         rotateAction.performed += OnRotatePerformed;
     }
 
     private void OnEnable()
     {
-        if (tapAction != null) tapAction.Enable();
-        if (positionAction != null) positionAction.Enable();
-        if (rotateAction != null) rotateAction.Enable();
+        tapAction?.Enable();
+        positionAction?.Enable();
+        rotateAction?.Enable();
     }
 
     private void OnDisable()
     {
-        if (tapAction != null) tapAction.Disable();
-        if (positionAction != null) positionAction.Disable();
-        if (rotateAction != null) rotateAction.Disable();
+        tapAction?.Disable();
+        positionAction?.Disable();
+        rotateAction?.Disable();
     }
 
-    /// <summary>
-    /// Tap/Click 이벤트
-    /// </summary>
     private void OnTapPerformed(InputAction.CallbackContext context)
     {
-        // UI 클릭은 무시
+        // Ignore clicks on UI elements
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-        {
             return;
-        }
 
         Vector2 screenPosition = positionAction.ReadValue<Vector2>();
         HandleClick(screenPosition);
     }
 
-    /// <summary>
-    /// Rotate 이벤트
-    /// </summary>
     private void OnRotatePerformed(InputAction.CallbackContext context)
     {
         if (selectedBlock != null)
-        {
             RotateSelectedBlock();
-        }
     }
 
-    /// <summary>
-    /// 클릭/터치 처리
-    /// </summary>
     private void HandleClick(Vector2 screenPosition)
     {
         Ray ray = mainCamera.ScreenPointToRay(screenPosition);
         RaycastHit hit;
 
-        // 1. 블록 클릭 체크
+        // 1. Check for block click
         if (Physics.Raycast(ray, out hit, maxRaycastDistance, blockLayer))
         {
             BlockObject block = hit.collider.GetComponentInParent<BlockObject>();
@@ -134,7 +109,7 @@ public class InputManager : MonoBehaviour
             }
         }
 
-        // 2. 격자 셀 클릭 체크
+        // 2. Check for grid cell click
         if (Physics.Raycast(ray, out hit, maxRaycastDistance, gridLayer))
         {
             GridCell cell = hit.collider.GetComponent<GridCell>();
@@ -145,49 +120,33 @@ public class InputManager : MonoBehaviour
             }
         }
 
-        // 3. 빈 공간 클릭
+        // 3. Empty space
         OnEmptySpaceClicked?.Invoke(hit.point);
-        
-        // 블록 선택 해제
+
         if (selectedBlock != null)
-        {
             DeselectBlock();
-        }
     }
 
-    /// <summary>
-    /// 블록 선택
-    /// </summary>
     private void SelectBlock(BlockObject block)
     {
-        // 이미 선택된 블록을 다시 클릭하면 해제
+        // Clicking the already-selected block deselects it
         if (selectedBlock == block)
         {
             DeselectBlock();
             return;
         }
 
-        // 기존 선택 해제
         if (selectedBlock != null)
         {
             selectedBlock.SetSelected(false);
             OnBlockDeselected?.Invoke(selectedBlock);
         }
 
-        // 새 블록 선택
         selectedBlock = block;
         selectedBlock.SetSelected(true);
-        
-        // 디버그
-        Debug.Log($"Block selected: {selectedBlock.name}");
-        Debug.Log($"Block shape is null? {selectedBlock.BlockShape == null}");
-        
         OnBlockSelected?.Invoke(selectedBlock);
     }
 
-    /// <summary>
-    /// 블록 선택 해제
-    /// </summary>
     private void DeselectBlock()
     {
         if (selectedBlock != null)
@@ -195,48 +154,20 @@ public class InputManager : MonoBehaviour
             selectedBlock.SetSelected(false);
             OnBlockDeselected?.Invoke(selectedBlock);
             selectedBlock = null;
-
-            Debug.Log("Block deselected");
         }
     }
 
-    /// <summary>
-    /// 선택된 블록 회전
-    /// </summary>
     private void RotateSelectedBlock()
     {
-        if (selectedBlock != null)
-        {
-            selectedBlock.Rotate();
-            Debug.Log($"Block rotated: {selectedBlock.CurrentRotation}°");
-        }
+        selectedBlock?.Rotate();
     }
 
-    /// <summary>
-    /// 현재 선택된 블록 가져오기
-    /// </summary>
-    public BlockObject GetSelectedBlock()
-    {
-        return selectedBlock;
-    }
+    public BlockObject GetSelectedBlock() => selectedBlock;
 
-    /// <summary>
-    /// 강제로 블록 선택 해제
-    /// </summary>
-    public void ForceDeselectBlock()
-    {
-        DeselectBlock();
-    }
+    public void ForceDeselectBlock() => DeselectBlock();
 
-    /// <summary>
-    /// 블록이 선택되어 있는지
-    /// </summary>
-    public bool HasSelectedBlock()
-    {
-        return selectedBlock != null;
-    }
+    public bool HasSelectedBlock() => selectedBlock != null;
 
-    // 디버그용
     private void OnDrawGizmos()
     {
         if (selectedBlock != null)
@@ -248,11 +179,7 @@ public class InputManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        // 이벤트 해제
-        if (tapAction != null)
-            tapAction.performed -= OnTapPerformed;
-        
-        if (rotateAction != null)
-            rotateAction.performed -= OnRotatePerformed;
+        if (tapAction != null) tapAction.performed -= OnTapPerformed;
+        if (rotateAction != null) rotateAction.performed -= OnRotatePerformed;
     }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 블록 모양 데이터 (직렬화 가능)
+/// Block shape data (serializable).
 /// </summary>
 [System.Serializable]
 public class BlockShapeData
@@ -18,7 +18,7 @@ public class BlockShapeData
     public Color blockColor = Color.white;
 
     /// <summary>
-    /// 1D 배열로 저장 (Unity Inspector 직렬화용)
+    /// Flattened 1D array for Unity Inspector serialization.
     /// </summary>
     [SerializeField]
     private bool[] shapeFlattened;
@@ -27,7 +27,7 @@ public class BlockShapeData
     private float colorR, colorG, colorB, colorA;
 
     /// <summary>
-    /// 기본 생성자
+    /// Default constructor.
     /// </summary>
     public BlockShapeData()
     {
@@ -38,7 +38,7 @@ public class BlockShapeData
     }
 
     /// <summary>
-    /// 크기 지정 생성자
+    /// Constructor with explicit dimensions.
     /// </summary>
     public BlockShapeData(int w, int h)
     {
@@ -49,7 +49,7 @@ public class BlockShapeData
     }
 
     /// <summary>
-    /// 모양 직접 지정 생성자
+    /// Constructor with a pre-built shape.
     /// </summary>
     public BlockShapeData(bool[,] blockShape)
     {
@@ -64,38 +64,32 @@ public class BlockShapeData
         {
             width = blockShape.GetLength(0);
             height = blockShape.GetLength(1);
-            shape = (bool[,])blockShape.Clone(); // Clone 추가!
+            shape = (bool[,])blockShape.Clone();
         }
         FlattenShape();
     }
 
     /// <summary>
-    /// 2D 배열을 1D로 평탄화 (직렬화용)
+    /// Flatten the 2D shape to a 1D array for serialization.
     /// </summary>
     public void FlattenShape()
     {
         if (shape == null)
         {
-            // shape가 null이면 복원 시도
             UnflattenShape();
             if (shape == null) return;
         }
 
         shapeFlattened = new bool[width * height];
         for (int x = 0; x < width; x++)
-        {
             for (int y = 0; y < height; y++)
-            {
                 shapeFlattened[x * height + y] = shape[x, y];
-            }
-        }
-        
-        // 색상도 저장
+
         SaveColor();
     }
 
     /// <summary>
-    /// 1D 배열을 2D로 복원 (역직렬화용)
+    /// Restore the 2D shape from the flattened 1D array.
     /// </summary>
     public void UnflattenShape()
     {
@@ -104,7 +98,7 @@ public class BlockShapeData
             Debug.LogWarning("shapeFlattened is null or empty!");
             return;
         }
-        
+
         if (width <= 0 || height <= 0)
         {
             Debug.LogWarning($"Invalid dimensions: {width}x{height}");
@@ -118,49 +112,37 @@ public class BlockShapeData
             {
                 int index = x * height + y;
                 if (index < shapeFlattened.Length)
-                {
                     shape[x, y] = shapeFlattened[index];
-                }
             }
         }
     }
 
     /// <summary>
-    /// 검증: 최소 하나 이상의 셀이 채워져 있는지
+    /// Returns true if at least one cell is filled.
     /// </summary>
     public bool IsValid()
     {
         if (shape == null) return false;
-
         for (int x = 0; x < width; x++)
-        {
             for (int y = 0; y < height; y++)
-            {
                 if (shape[x, y]) return true;
-            }
-        }
         return false;
     }
 
     /// <summary>
-    /// 채워진 셀 개수
+    /// Number of filled cells.
     /// </summary>
     public int GetFilledCellCount()
     {
         int count = 0;
         if (shape == null) return count;
-
         for (int x = 0; x < width; x++)
-        {
             for (int y = 0; y < height; y++)
-            {
                 if (shape[x, y]) count++;
-            }
-        }
         return count;
     }
 
-    // OnValidate는 ScriptableObject에서 사용
+    // Called by ScriptableObject.OnValidate
     public void OnValidate()
     {
         UnflattenShape();
@@ -168,7 +150,7 @@ public class BlockShapeData
     }
 
     /// <summary>
-    /// 색상 저장 (직렬화용)
+    /// Save color components for serialization.
     /// </summary>
     public void SaveColor()
     {
@@ -179,7 +161,7 @@ public class BlockShapeData
     }
 
     /// <summary>
-    /// 색상 복원 (역직렬화용)
+    /// Restore color from serialized components.
     /// </summary>
     public void LoadColor()
     {
@@ -188,11 +170,11 @@ public class BlockShapeData
 }
 
 /// <summary>
-/// 미리 정의된 블록 모양 (테트리스 스타일)
+/// Predefined block shapes.
 /// </summary>
 public static class PredefinedShapes
 {
-    // I 블록 (1x4)
+    // I-block (1x4)
     public static bool[,] I_Shape = new bool[,]
     {
         { true },
@@ -201,21 +183,21 @@ public static class PredefinedShapes
         { true }
     };
 
-    // O 블록 (2x2)
+    // O-block (2x2)
     public static bool[,] O_Shape = new bool[,]
     {
         { true, true },
         { true, true }
     };
 
-    // T 블록
+    // T-block
     public static bool[,] T_Shape = new bool[,]
     {
         { false, true, false },
         { true, true, true }
     };
 
-    // L 블록
+    // L-block
     public static bool[,] L_Shape = new bool[,]
     {
         { true, false },
@@ -223,7 +205,7 @@ public static class PredefinedShapes
         { true, true }
     };
 
-    // J 블록
+    // J-block
     public static bool[,] J_Shape = new bool[,]
     {
         { false, true },
@@ -231,33 +213,33 @@ public static class PredefinedShapes
         { true, true }
     };
 
-    // Z 블록
+    // Z-block
     public static bool[,] Z_Shape = new bool[,]
     {
         { true, true, false },
         { false, true, true }
     };
 
-    // S 블록
+    // S-block
     public static bool[,] S_Shape = new bool[,]
     {
         { false, true, true },
         { true, true, false }
     };
 
-    // 1x1 블록
+    // 1x1 single
     public static bool[,] Single_Shape = new bool[,]
     {
         { true }
     };
 
-    // 1x2 블록
+    // 1x2 domino
     public static bool[,] Domino_Shape = new bool[,]
     {
         { true, true }
     };
 
-    // 1x3 블록
+    // 1x3 triple
     public static bool[,] Triple_Shape = new bool[,]
     {
         { true, true, true }

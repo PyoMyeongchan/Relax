@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// 블록 개체 (모양, 선택 상태, 회전)
+/// A block instance — shape, selection state, and rotation.
 /// </summary>
 public class BlockObject : MonoBehaviour
 {
@@ -51,7 +51,7 @@ public class BlockObject : MonoBehaviour
     public int CurrentRotation => currentRotation;
 
     /// <summary>
-    /// 블록 초기화
+    /// Initialize the block with shape, prefabs and color.
     /// </summary>
     public void Initialize(bool[,] shape, GameObject prefab, Material normal, Material selected, Color color = default)
     {
@@ -71,14 +71,9 @@ public class BlockObject : MonoBehaviour
         isPlaced = false;
         currentRotation = 0;
 
-        Debug.Log($"BlockObject initialized: {shapeSize.x}x{shapeSize.y}, Color: {blockColor}");
-
         CreateVisual();
     }
 
-    /// <summary>
-    /// 블록 시각적 생성
-    /// </summary>
     private void CreateVisual()
     {
         ClearVisual();
@@ -86,7 +81,7 @@ public class BlockObject : MonoBehaviour
         int width = blockShape.GetLength(0);
         int height = blockShape.GetLength(1);
 
-        // 중앙 정렬을 위한 오프셋
+        // Center offset
         float offsetX = -(width * (cellSize + cellSpacing)) / 2f + (cellSize + cellSpacing) / 2f;
         float offsetZ = -(height * (cellSize + cellSpacing)) / 2f + (cellSize + cellSpacing) / 2f;
 
@@ -106,15 +101,11 @@ public class BlockObject : MonoBehaviour
                     cell.transform.localPosition = localPos;
                     cell.transform.localScale = new Vector3(cellSize, 0.2f, cellSize);
                     cell.name = $"BlockCell_{x}_{z}";
-                    
-                    // Layer 설정
+
                     cell.layer = LayerMask.NameToLayer("Block");
-                    
-                    // Collider 확인 및 추가
+
                     if (cell.GetComponent<Collider>() == null)
-                    {
                         cell.AddComponent<BoxCollider>();
-                    }
 
                     MeshRenderer renderer = cell.GetComponent<MeshRenderer>();
                     if (renderer != null && normalMaterial != null)
@@ -129,24 +120,13 @@ public class BlockObject : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 시각 요소 제거
-    /// </summary>
     private void ClearVisual()
     {
         foreach (var cell in visualCells)
-        {
-            if (cell != null)
-            {
-                Destroy(cell);
-            }
-        }
+            if (cell != null) Destroy(cell);
         visualCells.Clear();
     }
 
-    /// <summary>
-    /// 블록 선택 상태 변경
-    /// </summary>
     public void SetSelected(bool selected)
     {
         isSelected = selected;
@@ -154,12 +134,12 @@ public class BlockObject : MonoBehaviour
     }
 
     /// <summary>
-    /// 블록 배치 완료
+    /// Mark the block as placed (or un-placed) at the given grid position.
     /// </summary>
     public void SetPlaced(bool placed, Vector2Int gridPos = default, bool[,] shape = null)
     {
         isPlaced = placed;
-        
+
         if (placed)
         {
             placedGridPosition = gridPos;
@@ -168,16 +148,12 @@ public class BlockObject : MonoBehaviour
         }
         else
         {
-            // 배치 취소
             placedGridPosition = Vector2Int.zero;
             placedShape = null;
             gameObject.SetActive(true);
         }
     }
 
-    /// <summary>
-    /// 시각적 업데이트
-    /// </summary>
     private void UpdateVisual()
     {
         Material material = isSelected ? selectedMaterial : normalMaterial;
@@ -189,7 +165,6 @@ public class BlockObject : MonoBehaviour
                 MeshRenderer renderer = cell.GetComponent<MeshRenderer>();
                 if (renderer != null && material != null)
                 {
-                    // Material 새로 만들어서 색상 적용
                     renderer.material = new Material(material);
                     renderer.material.color = blockColor;
                 }
@@ -198,18 +173,15 @@ public class BlockObject : MonoBehaviour
     }
 
     /// <summary>
-    /// 블록 회전 (시계방향 90도)
+    /// Rotate the block 90 degrees clockwise.
     /// </summary>
     public void Rotate()
     {
         currentRotation = (currentRotation + 90) % 360;
-        CreateVisual(); // 회전 후 시각 재생성
+        CreateVisual();
         UpdateVisual();
     }
 
-    /// <summary>
-    /// 현재 회전 상태의 블록 모양 반환
-    /// </summary>
     private bool[,] GetRotatedShape()
     {
         if (blockShape == null)
@@ -222,16 +194,11 @@ public class BlockObject : MonoBehaviour
         bool[,] result = (bool[,])blockShape.Clone();
 
         for (int i = 0; i < rotationCount; i++)
-        {
             result = RotateShapeClockwise(result);
-        }
 
         return result;
     }
 
-    /// <summary>
-    /// 모양을 시계방향 90도 회전
-    /// </summary>
     private bool[,] RotateShapeClockwise(bool[,] shape)
     {
         int width = shape.GetLength(0);
@@ -239,30 +206,21 @@ public class BlockObject : MonoBehaviour
         bool[,] rotated = new bool[height, width];
 
         for (int x = 0; x < width; x++)
-        {
             for (int z = 0; z < height; z++)
-            {
                 rotated[z, width - 1 - x] = shape[x, z];
-            }
-        }
 
         return rotated;
     }
 
-    /// <summary>
-    /// 현재 회전 상태의 블록 크기 반환
-    /// </summary>
     private Vector2Int GetRotatedSize()
     {
         if (currentRotation == 90 || currentRotation == 270)
-        {
             return new Vector2Int(shapeSize.y, shapeSize.x);
-        }
         return shapeSize;
     }
 
     /// <summary>
-    /// 블록 리셋 (재사용용)
+    /// Reset the block to its initial state (for stage restart).
     /// </summary>
     public void Reset()
     {
@@ -274,8 +232,5 @@ public class BlockObject : MonoBehaviour
         UpdateVisual();
     }
 
-    private void OnDestroy()
-    {
-        ClearVisual();
-    }
+    private void OnDestroy() => ClearVisual();
 }

@@ -18,33 +18,50 @@ public class PlacementSystem : MonoBehaviour
 
     private BlockObject currentBlock;
     private List<GridCell> previewCells = new List<GridCell>();
+    private BlockSpawner blockSpawner;
+
+    // 제거 횟수 제한 (-1 = 무제한)
+    private int maxRemovals = -1;
+    private int removalsUsed = 0;
+
+    public int RemovalsLeft => maxRemovals < 0 ? int.MaxValue : Mathf.Max(0, maxRemovals - removalsUsed);
+    public bool CanRemoveBlocks => maxRemovals < 0 || removalsUsed < maxRemovals;
 
     // 이벤트
     public System.Action<BlockObject, Vector2Int> OnBlockPlaced;
     public System.Action OnPlacementFailed;
     public System.Action OnAllBlocksPlaced;
+    public System.Action<int> OnRemovalsChanged;
 
     private void Awake()
     {
-        // 자동으로 컴포넌트 찾기
         if (gridSystem == null)
             gridSystem = GetComponent<GridSystem>();
-        
+
         if (stateManager == null)
             stateManager = GetComponent<GridStateManager>();
-        
+
         if (inputManager == null)
             inputManager = FindObjectOfType<InputManager>();
 
-        // Null 체크
-        if (gridSystem == null)
-            Debug.LogError("GridSystem not found!");
-        
-        if (stateManager == null)
-            Debug.LogError("GridStateManager not found!");
-        
-        if (inputManager == null)
-            Debug.LogError("InputManager not found!");
+        if (blockSpawner == null)
+            blockSpawner = FindObjectOfType<BlockSpawner>();
+
+        if (gridSystem == null) Debug.LogError("GridSystem not found!");
+        if (stateManager == null) Debug.LogError("GridStateManager not found!");
+        if (inputManager == null) Debug.LogError("InputManager not found!");
+        if (blockSpawner == null) Debug.LogError("BlockSpawner not found!");
+    }
+
+    /// <summary>
+    /// 스테이지 로드 시 난이도 설정 적용
+    /// </summary>
+    public void Configure(bool showPreview, int maxRemovals)
+    {
+        this.showPreview = showPreview;
+        this.maxRemovals = maxRemovals;
+        this.removalsUsed = 0;
+        OnRemovalsChanged?.Invoke(RemovalsLeft);
     }
 
     private void OnEnable()
@@ -111,20 +128,21 @@ public class PlacementSystem : MonoBehaviour
     {
         if (cell == null || !cell.IsFilled) return;
 
-        // 모든 배치된 블록을 확인
-        BlockSpawner spawner = FindObjectOfType<BlockSpawner>();
-        if (spawner == null) return;
-
-        foreach (var block in spawner.SpawnedBlocks)
+        if (!CanRemoveBlocks)
         {
-            if (block != null && block.IsPlaced)
+            Debug.Log("블록 되돌리기 횟수를 모두 사용했습니다.");
+            OnPlacementFailed?.Invoke();
+            return;
+        }
+
+        if (blockSpawner == null) return;
+
+        foreach (var block in blockSpawner.SpawnedBlocks)
+        {
+            if (block != null && block.IsPlaced && IsBlockAtPosition(block, cell.GridPosition))
             {
-                // 이 블록이 클릭한 셀을 포함하는지 확인
-                if (IsBlockAtPosition(block, cell.GridPosition))
-                {
-                    RemoveBlock(block);
-                    break;
-                }
+                RemoveBlock(block);
+                break;
             }
         }
     }
@@ -165,13 +183,15 @@ public class PlacementSystem : MonoBehaviour
     {
         if (block == null || block.PlacedShape == null) return;
 
-        // 격자 셀들을 비우기
         stateManager.RemoveBlock(block.PlacedGridPosition, block.PlacedShape);
-
-        // 블록을 다시 활성화
         block.SetPlaced(false);
 
-        Debug.Log($"Block removed: {block.name}");
+        if (maxRemovals >= 0)
+        {
+            removalsUsed++;
+            OnRemovalsChanged?.Invoke(RemovalsLeft);
+            Debug.Log($"Block removed ({RemovalsLeft}/{maxRemovals} 남음)");
+        }
     }
 
     /// <summary>
@@ -339,11 +359,9 @@ public class PlacementSystem : MonoBehaviour
     /// </summary>
     private void CheckAllBlocksPlaced()
     {
-        BlockSpawner spawner = FindObjectOfType<BlockSpawner>();
-        if (spawner != null && spawner.AreAllBlocksPlaced())
+        if (blockSpawner != null && blockSpawner.AreAllBlocksPlaced())
         {
             OnAllBlocksPlaced?.Invoke();
-            Debug.Log("All blocks placed!");
         }
     }
 

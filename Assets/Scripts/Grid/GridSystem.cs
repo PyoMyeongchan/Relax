@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 격자 생성 및 관리, 셀 접근, 좌표 변환
+/// Creates the grid, manages cell access and coordinate conversion.
 /// </summary>
 public class GridSystem : MonoBehaviour
 {
@@ -22,7 +22,7 @@ public class GridSystem : MonoBehaviour
     public float CellSpacing => cellSpacing;
 
     /// <summary>
-    /// 격자 생성
+    /// Create the grid with the given dimensions.
     /// </summary>
     public void CreateGrid(int width, int height)
     {
@@ -65,28 +65,18 @@ public class GridSystem : MonoBehaviour
         Debug.Log($"Grid created: {gridWidth}x{gridHeight}");
     }
 
-    /// <summary>
-    /// 특정 위치의 셀 가져오기
-    /// </summary>
     public GridCell GetCell(int x, int z)
     {
         if (IsValidPosition(x, z))
-        {
             return grid[x, z];
-        }
         return null;
     }
 
-    /// <summary>
-    /// 격자 좌표가 유효한지 확인
-    /// </summary>
     public bool IsValidPosition(int x, int z)
-    {
-        return x >= 0 && x < gridWidth && z >= 0 && z < gridHeight;
-    }
+        => x >= 0 && x < gridWidth && z >= 0 && z < gridHeight;
 
     /// <summary>
-    /// 월드 좌표를 격자 좌표로 변환
+    /// Convert a world position to grid coordinates.
     /// </summary>
     public Vector2Int WorldToGridPosition(Vector3 worldPos)
     {
@@ -100,59 +90,37 @@ public class GridSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// 격자 좌표를 월드 좌표로 변환
+    /// Convert grid coordinates to a world position.
     /// </summary>
     public Vector3 GridToWorldPosition(int x, int z)
     {
         if (IsValidPosition(x, z))
-        {
             return grid[x, z].transform.position;
-        }
         return Vector3.zero;
     }
 
-    /// <summary>
-    /// 격자 완전히 제거
-    /// </summary>
     public void ClearGrid()
     {
         if (grid != null)
         {
             for (int x = 0; x < grid.GetLength(0); x++)
-            {
                 for (int z = 0; z < grid.GetLength(1); z++)
-                {
                     if (grid[x, z] != null)
-                    {
                         Destroy(grid[x, z].gameObject);
-                    }
-                }
-            }
         }
         grid = null;
     }
 
-    private void OnDestroy()
-    {
-        ClearGrid();
-    }
+    private void OnDestroy() => ClearGrid();
 
-    // 디버그용: 격자 시각화
     private void OnDrawGizmos()
     {
         if (grid == null) return;
 
         Gizmos.color = Color.green;
         for (int x = 0; x < gridWidth; x++)
-        {
             for (int z = 0; z < gridHeight; z++)
-            {
                 if (grid[x, z] != null)
-                {
-                    Vector3 pos = grid[x, z].transform.position;
-                    Gizmos.DrawWireCube(pos, Vector3.one * cellSize * 0.9f);
-                }
-            }
-        }
+                    Gizmos.DrawWireCube(grid[x, z].transform.position, Vector3.one * cellSize * 0.9f);
     }
 }
